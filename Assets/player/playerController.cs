@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class playerController : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class playerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         velocity = 10;
         forceMultiply = 10;
-        jumpForce = 10;
+        jumpForce = 40;
         
     }
 
@@ -39,6 +40,8 @@ public class playerController : MonoBehaviour
         rb.velocity = transform.forward * moveV * forceMultiply + transform.right * moveH * forceMultiply;
     }
 
+    #region Colliders
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "ground")
@@ -48,9 +51,46 @@ public class playerController : MonoBehaviour
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == "ground")
+        if (collision.gameObject.tag == "ground")
         {
             OnGround = false;
         }
     }
+
+    #endregion
+
+    #region VIDA
+
+    public int life_;
+    public int maxLife_;
+    public Image lifeBar;
+
+    public int GetLife() => life_;
+    public void SetLife(int increment)
+    {
+        if (increment >= life_)
+        {
+            life_ = maxLife_;
+        }
+        else
+        {
+            life_ = increment;
+        }
+        UpdateLifeBar();
+        if (life_ <= 0)
+        {
+            DeathController();
+        }
+    }
+    public void AddHealth(int lifeIncrement) => this.SetLife(life_ + lifeIncrement);
+    public void RemoveHealth(int lifeReduced) => this.SetLife(life_ - lifeReduced);
+    public void UpdateLifeBar() => this.lifeBar.fillAmount = ((1.6f / this.maxLife_) * life_);
+    public void DeathController()
+    {
+        Destroy(gameObject);
+    }
+
+    #endregion
+    
+
 }
