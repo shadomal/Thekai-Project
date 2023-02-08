@@ -20,7 +20,7 @@ public class playerController : MonoBehaviour
         jumpForce = 40;
         
     }
-
+    #region Movement
     // Update is called once per frame
     void Update()
     {
@@ -39,7 +39,7 @@ public class playerController : MonoBehaviour
     {
         rb.velocity = transform.forward * moveV * forceMultiply + transform.right * moveH * forceMultiply;
     }
-
+    #endregion
     #region Colliders
 
     private void OnCollisionEnter2D(Collision2D collision)
